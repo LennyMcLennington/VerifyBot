@@ -5,6 +5,7 @@ The bot for the [BTD6 Mods & Discussion Discord server](https://discord.gg/nuMvg
     <a href="https://discord.gg/nuMvgkP" alt="Discord">
         <img src="https://img.shields.io/discord/504782676331331584" />
     </a>
+    <img src="https://img.shields.io/codefactor/grade/github/BowDown097/VerifyBot" />
 </p>
 
 ## Running your own instance of the bot
