@@ -4,6 +4,7 @@ public class EventSystem
     private readonly CommandService commands;
     private readonly DiscordSocketClient client;
     private readonly ServiceProvider serviceProvider;
+
     public EventSystem(ServiceProvider serviceProvider)
     {
         this.serviceProvider = serviceProvider;

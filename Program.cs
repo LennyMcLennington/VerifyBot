@@ -3,7 +3,7 @@ internal static class Program
 {
     private static async Task Main()
     {
-        DiscordSocketClient client = new(new DiscordSocketConfig { GatewayIntents = GatewayIntents.All });
+        DiscordSocketClient client = new();
         ServiceProvider serviceProvider = new ServiceCollection()
             .AddSingleton(client)
             .AddSingleton<CommandService>()
