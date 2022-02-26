@@ -62,7 +62,7 @@ public class Commands : ModuleBase<SocketCommandContext>
                 ISteamWebResponse<OwnedGamesResultModel> ownedGames = await player.GetOwnedGamesAsync(id);
                 IReadOnlyCollection<OwnedGameModel> ownedGamesData = ownedGames.Data.OwnedGames;
 
-                if (!ownedGamesData.Any(x => x.AppId == Constants.BTD6_ID) && !(playingSharedBtd6.Data.Value != 0 && playingSharedBtd6.Data != null))
+                if (!ownedGamesData.Any(x => x.AppId == Constants.BTD6_ID) && playingSharedBtd6.Data.GetValueOrDefault() == 0)
                     return CommandResult.FromError($"{Context.User.Mention}, I could not find BTD6 in your Steam games list. Do you perhaps not have your account/games public, or not have BTD6? Make sure you do, then try again. To learn how to make your account/games public, go to <https://help.challengermode.com/en/articles/2579734-make-your-steam-profile-public>.");
 
                 await ReplyAsync($"{Context.User.Mention}, you were verified successfully and received the Purchased BTD6 on Steam role!");
@@ -73,12 +73,12 @@ public class Commands : ModuleBase<SocketCommandContext>
                 await (Context.Channel as SocketTextChannel)?.DeleteMessagesAsync(msgs);
             }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
             EmbedBuilder embed = new EmbedBuilder()
                 .WithTitle("Shit Code Exception")
                 .WithColor(Color.Red)
-                .WithDescription(ex.StackTrace);
+                .WithDescription($"{e.Message}\n{e.StackTrace}");
             await ReplyAsync($"{Context.User.Mention}, there seems to be a problem with the bot. Here's some details. {MentionUtils.MentionUser(Constants.BOT_OWNER)} fix your shit!!!", embed: embed.Build());
         }
 

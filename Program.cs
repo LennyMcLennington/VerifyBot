@@ -3,7 +3,12 @@ internal static class Program
 {
     private static async Task Main()
     {
-        DiscordSocketClient client = new();
+        DiscordSocketClient client = new(new DiscordSocketConfig
+        {
+            AlwaysDownloadUsers = true,
+            LargeThreshold = 250,
+            MessageCacheSize = 1500
+        });
         ServiceProvider serviceProvider = new ServiceCollection()
             .AddSingleton(client)
             .AddSingleton<CommandService>()

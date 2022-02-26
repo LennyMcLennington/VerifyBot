@@ -63,16 +63,9 @@ public class EventSystem
 
     private static async Task Commands_CommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result)
     {
-        string reason = Format.Sanitize(result.ErrorReason);
-        string response = result.Error switch {
-            CommandError.BadArgCount => $"{context.User.Mention}, you must specify {command.Value.Parameters.Count(p => !p.IsOptional)} argument(s)!\nCommand usage: ``{command.Value.Remarks}``",
-            CommandError.ObjectNotFound => reason,
-            _ => !result.IsSuccess && result is CommandResult ? reason : ""
-        };
-
-        if (response != "")
-            await context.Channel.SendMessageAsync(response, allowedMentions: new AllowedMentions(AllowedMentionTypes.Users));
+        if (result is CommandResult cResult && !cResult.IsSuccess)
+            await context.Channel.SendMessageAsync(cResult.Reason, allowedMentions: new(AllowedMentionTypes.Users));
         else if (!result.IsSuccess)
-            Console.WriteLine(reason);
+            Console.WriteLine(result.ErrorReason);
     }
 }
