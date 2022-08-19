@@ -53,7 +53,7 @@ public class Commands : ModuleBase<SocketCommandContext>
             if (!connectedAccounts.Children().Any(x => x["type"].ToString() == "steam"))
                 return CommandResult.FromError($"{Context.User.Mention}, I could not find Steam in your connected accounts. Do you perhaps not have it connected? Make sure you do in Settings -> Connections, then try again.");
 
-            foreach (JObject item in connectedAccounts.Children().Where(x => x["type"].ToString() == "steam"))
+            foreach (JObject item in connectedAccounts.Children().Where(x => x["type"].ToString() == "steam").Cast<JObject>())
             {
                 SteamWebInterfaceFactory webInterfaceFactory = new(Credentials.STEAM_API_KEY);
                 PlayerService player = webInterfaceFactory.CreateSteamWebInterface<PlayerService>();
@@ -70,7 +70,7 @@ public class Commands : ModuleBase<SocketCommandContext>
                 await (Context.User as IGuildUser)?.AddRoleAsync(Context.Guild.GetRole(Constants.VERIFIED_ROLE));
 
                 IEnumerable<IMessage> msgs = await Context.Channel.GetMessagesAsync().FlattenAsync();
-                await (Context.Channel as SocketTextChannel)?.DeleteMessagesAsync(msgs);
+                await (Context.Channel as SocketTextChannel)?.DeleteMessagesAsync(msgs.Where(m => m.Id != Constants.VERIFY_INSTRUCTIONS_MSG));
             }
         }
         catch (Exception e)
@@ -79,7 +79,7 @@ public class Commands : ModuleBase<SocketCommandContext>
                 .WithTitle("Shit Code Exception")
                 .WithColor(Color.Red)
                 .WithDescription($"{e.Message}\n{e.StackTrace}");
-            await ReplyAsync($"{Context.User.Mention}, there seems to be a problem with the bot. Here's some details. {MentionUtils.MentionUser(Constants.BOT_OWNER)} fix your shit!!!", embed: embed.Build());
+            await ReplyAsync($"{Context.User.Mention}, there seems to have been a problem verifying you. Here's the details. This problem will probably be fixed by just trying again, but if it persists, ping the server owner.");
         }
 
         await Context.Message.DeleteAsync();
