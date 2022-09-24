@@ -17,7 +17,7 @@ internal static class Program
         CommandService commands = serviceProvider.GetRequiredService<CommandService>();
         await commands.AddModulesAsync(Assembly.GetEntryAssembly(), serviceProvider);
         new EventSystem(serviceProvider).SubscribeEvents();
-        await client.LoginAsync(TokenType.Bot, Credentials.TOKEN);
+        await client.LoginAsync(TokenType.Bot, Credentials.Token);
         await client.SetGameAsync("(〃´∀｀〃)ε｀●)chu♪");
         await client.StartAsync();
         await Task.Delay(-1);
