@@ -63,7 +63,7 @@ public class Commands : ModuleBase<SocketCommandContext>
                 IReadOnlyCollection<OwnedGameModel> ownedGamesData = ownedGames.Data.OwnedGames;
 
                 if (ownedGamesData.All(x => x.AppId != Constants.Btd6Id) && playingSharedBtd6.Data.GetValueOrDefault() == 0)
-                    return CommandResult.FromError($"{Context.User.Mention}, I could not find BTD6 in your Steam games list. Do you perhaps not have your account/games public, or not have BTD6? Make sure you do, then try again. To learn how to make your account/games public, go to <https://help.challengermode.com/en/articles/2579734-make-your-steam-profile-public>.");
+                    return CommandResult.FromError($"{Context.User.Mention}, I could not find BTD6 in your Steam games list. Do you perhaps not have your account/games public, or not have BTD6? Make sure you do, then try again. If you do not know how to make your account/games public, look it up.");
 
                 await ReplyAsync($"{Context.User.Mention}, you were verified successfully and received the Purchased BTD6 on Steam role!");
                 await Task.Delay(1500);
