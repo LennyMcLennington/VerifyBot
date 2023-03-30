@@ -1,22 +1,22 @@
 namespace VerifyBot;
 public class EventSystem
 {
-    private readonly CommandService _commands;
-    private readonly DiscordSocketClient _client;
-    private readonly ServiceProvider _serviceProvider;
+    private readonly CommandService commands;
+    private readonly DiscordSocketClient client;
+    private readonly ServiceProvider serviceProvider;
 
     public EventSystem(ServiceProvider serviceProvider)
     {
-        _commands = serviceProvider.GetRequiredService<CommandService>();
-        _client = serviceProvider.GetRequiredService<DiscordSocketClient>();
-        _serviceProvider = serviceProvider;
+        commands = serviceProvider.GetRequiredService<CommandService>();
+        client = serviceProvider.GetRequiredService<DiscordSocketClient>();
+        this.serviceProvider = serviceProvider;
     }
 
     public void SubscribeEvents()
     {
-        _client.Log += Client_Log;
-        _client.MessageReceived += Client_MessageReceived;
-        _commands.CommandExecuted += Commands_CommandExecuted;
+        client.Log += Client_Log;
+        client.MessageReceived += Client_MessageReceived;
+        commands.CommandExecuted += Commands_CommandExecuted;
     }
 
     private static Task Client_Log(LogMessage arg)
@@ -28,12 +28,12 @@ public class EventSystem
     private async Task Client_MessageReceived(SocketMessage arg)
     {
         SocketUserMessage message = arg as SocketUserMessage;
-        SocketCommandContext context = new(_client, message);
+        SocketCommandContext context = new(client, message);
         if (message.Author.IsBot || string.IsNullOrWhiteSpace(message.Content)) return;
 
         int argPos = 0;
         if (message.HasCharPrefix('$', ref argPos))
-            await _commands.ExecuteAsync(context, argPos, _serviceProvider);
+            await commands.ExecuteAsync(context, argPos, serviceProvider);
     }
 
     private static async Task Commands_CommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result)
