@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerifyBot", "VerifyBot.csproj", "{A56594CC-65AA-4D1C-9784-7B3C9D660A70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerifyBot", "VerifyBot/VerifyBot.csproj", "{A56594CC-65AA-4D1C-9784-7B3C9D660A70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamWebAPI2", "SteamWebAPI2\src\SteamWebAPI2\SteamWebAPI2.csproj", "{2D844F2B-662C-42BC-BC17-E65A75992F05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steam.Models", "SteamWebAPI2\src\Steam.Models\Steam.Models.csproj", "{E1CA3913-0112-4588-B599-F974DBB825C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +16,13 @@ Global
 		{A56594CC-65AA-4D1C-9784-7B3C9D660A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A56594CC-65AA-4D1C-9784-7B3C9D660A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A56594CC-65AA-4D1C-9784-7B3C9D660A70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D844F2B-662C-42BC-BC17-E65A75992F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D844F2B-662C-42BC-BC17-E65A75992F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D844F2B-662C-42BC-BC17-E65A75992F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D844F2B-662C-42BC-BC17-E65A75992F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1CA3913-0112-4588-B599-F974DBB825C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1CA3913-0112-4588-B599-F974DBB825C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1CA3913-0112-4588-B599-F974DBB825C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1CA3913-0112-4588-B599-F974DBB825C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

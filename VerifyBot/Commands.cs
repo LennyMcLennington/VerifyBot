@@ -78,7 +78,7 @@ public class Commands : ModuleBase<SocketCommandContext>
             EmbedBuilder embed = new EmbedBuilder()
                 .WithTitle("Shit Code Exception")
                 .WithColor(Color.Red)
-                .WithDescription($"{e.Message}\n{e.StackTrace}");
+                .WithDescription($"{e.Message}\n{Format.Sanitize(e.StackTrace)}");
             await ReplyAsync($"{Context.User.Mention}, there seems to have been a problem verifying you. Here's the details. This problem will probably be fixed by just trying again, but if it persists, ping the server owner.",
                 embed: embed.Build());
         }

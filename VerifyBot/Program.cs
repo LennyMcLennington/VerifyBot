@@ -6,6 +6,7 @@ internal static class Program
         DiscordSocketClient client = new(new DiscordSocketConfig
         {
             AlwaysDownloadUsers = true,
+            GatewayIntents = GatewayIntents.All,
             LargeThreshold = 250,
             MessageCacheSize = 1500
         });
