@@ -58,11 +58,10 @@ public class Commands : ModuleBase<SocketCommandContext>
                 SteamWebInterfaceFactory webInterfaceFactory = new(Credentials.SteamApiKey);
                 PlayerService player = webInterfaceFactory.CreateSteamWebInterface<PlayerService>();
                 ulong id = item["id"].ToObject<ulong>();
-                ISteamWebResponse<ulong?> playingSharedBtd6 = await player.IsPlayingSharedGameAsync(id, Constants.Btd6Id);
                 ISteamWebResponse<OwnedGamesResultModel> ownedGames = await player.GetOwnedGamesAsync(id);
                 IReadOnlyCollection<OwnedGameModel> ownedGamesData = ownedGames.Data.OwnedGames;
 
-                if (ownedGamesData.All(x => x.AppId != Constants.Btd6Id) && playingSharedBtd6.Data.GetValueOrDefault() == 0)
+                if (ownedGamesData.All(x => x.AppId != Constants.Btd6Id))
                     return CommandResult.FromError($"{Context.User.Mention}, I could not find BTD6 in your Steam games list. Do you perhaps not have your account/games public, or not have BTD6? Make sure you do, then try again. If you do not know how to make your account/games public, look it up.");
 
                 await ReplyAsync($"{Context.User.Mention}, you were verified successfully and received the Purchased BTD6 on Steam role!");

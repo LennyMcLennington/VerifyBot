@@ -9,9 +9,6 @@
 		<PackageReference Include="Discord.Net" Version="3.10.0" />
 		<PackageReference Include="DotNetZip" Version="1.16.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\SteamWebAPI2\src\Steam.Models\Steam.Models.csproj" />
-	  <ProjectReference Include="..\SteamWebAPI2\src\SteamWebAPI2\SteamWebAPI2.csproj" />
+		<PackageReference Include="SteamWebAPI2" Version="4.4.1" />
 	</ItemGroup>
 </Project>
