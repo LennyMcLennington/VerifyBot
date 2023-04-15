@@ -1,41 +1,6 @@
 namespace VerifyBot;
 public class Commands : ModuleBase<SocketCommandContext>
 {
-    [Command("jukeboxfix")]
-    public async Task<RuntimeResult> JukeboxFix()
-    {
-        if (Context.Message.Attachments.Count == 0)
-            return CommandResult.FromError($"{Context.User.Mention}, you need to attach a Profile.Save file. It can be found at ``Program Files (x86)/Steam/userdata/[user-id]/960090/local/link/[player-id]/Profile.Save``.");
-
-        Attachment save = Context.Message.Attachments.First();
-        if (!save.Filename.Equals("Profile.Save", StringComparison.OrdinalIgnoreCase))
-            return CommandResult.FromError($"{Context.User.Mention}, you need to attach a Profile.Save file. It can be found at ``Program Files (x86)/Steam/userdata/[user-id]/960090/local/link/[player-id]/Profile.Save``.");
-
-        using HttpClient client = new();
-        byte[] buffer = await client.GetByteArrayAsync(save.Url);
-        await File.WriteAllBytesAsync("Profile.Save.temp", buffer);
-
-        if (!NkSave.UsesNkSaveSystem("Profile.Save.temp"))
-        {
-            File.Delete("Profile.Save.temp");
-            return CommandResult.FromError($"{Context.User.Mention}, you have attached an invalid save file!");
-        }
-
-        await using FileStream outstream = File.Open("Profile.Save", FileMode.Create);
-        await using FileStream instream = File.Open("Profile.Save.temp", FileMode.Open);
-        string json = NkSave.ReadFileContent(instream);
-        dynamic jsonObj = JObject.Parse(json);
-        jsonObj.savedPlayList = new JArray();
-        string outJson = Convert.ToString(jsonObj);
-
-        NkSave.WriteFileContent(instream, outJson, outstream);
-        await Context.Channel.SendFileAsync("Profile.Save", "Here's your new save! Replace the file at ``Program Files (x86)/Steam/userdata/[user-id]/960090/local/link/[player-id]/Profile.Save`` with this one.");
-        File.Delete("Profile.Save.temp");
-        File.Delete("Profile.Save");
-
-        return CommandResult.FromSuccess();
-    }
-
     [Command("verify")]
     public async Task<RuntimeResult> Verify()
     {
