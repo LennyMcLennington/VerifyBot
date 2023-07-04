@@ -1,7 +1,4 @@
 #include "botcommandhandler.h"
-#include <iostream>
-
-using namespace std::placeholders;
 
 namespace BotCommandHandler
 {

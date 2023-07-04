@@ -1,6 +1,4 @@
-#include <fstream>
 #include <dpp/dpp.h>
-#include <iostream>
 #include "botcommandhandler.h"
 #include "botconfig.h"
 #include "commands.h"
