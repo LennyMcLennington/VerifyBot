@@ -9,14 +9,12 @@ The bot for the [BTD6 Mods & Discussion Discord server](https://discord.gg/nuMvg
 </p>
 
 ## Running your own instance of the bot
-You'll need to create a file named Credentials.cs in the bot's main directory. The code needs to look exactly like this (of course, not in syntax, but you get the point):
-```cs
-namespace VerifyBot;
-public static class Credentials
+You'll need to create a file named config.json in the bot's binary directory. It needs to look EXACTLY like this:
+```json
 {
-    public const string SteamApiKey = "[STEAM API KEY]";
-    public const string Token = "[DISCORD BOT TOKEN]";
-    public const string UserToken = "[TOKEN FOR A USER ACCOUNT THAT WILL BE USED TO ACCESS CONNECTIONS]";
+    "botToken": "[DISCORD BOT TOKEN]",
+    "steamApiKey": "[STEAM API KEY]",
+    "userToken": "[TOKEN FOR A USER ACCOUNT THAT WILL BE USED TO ACCESS CONNECTIONS]"
 }
 ```
-What to plug into these variables can be figured out through some simple googling.
+What to plug in can be figured out through some simple googling.
