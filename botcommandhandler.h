@@ -1,13 +1,19 @@
 #ifndef BOTCOMMANDHANDLER_H
 #define BOTCOMMANDHANDLER_H
-#include <dpp/commandhandler.h>
+#include <dpp/cluster.h>
 #include <functional>
+#include <unordered_map>
 
-namespace BotCommandHandler
+class BotCommandHandler
 {
-    using commandFunc = std::function<void(dpp::commandhandler&, const std::string&, const dpp::parameter_list_t&, const dpp::command_source&)>;
-    void addCommand(dpp::commandhandler& handler, const std::string& command, commandFunc func, const dpp::parameter_registration_t& params = {},
-                    const std::string& description = "");
-}
+public:
+    using commandFunc = std::function<void(dpp::cluster&, const dpp::slashcommand_t&)>;
+    explicit BotCommandHandler(dpp::cluster& cluster);
+    void addCommand(const dpp::slashcommand& cmd, commandFunc func);
+private:
+    dpp::cluster& cluster;
+    std::unordered_map<std::string, commandFunc> commands;
+    void handOver(const dpp::slashcommand_t& event);
+};
 
 #endif // BOTCOMMANDHANDLER_H

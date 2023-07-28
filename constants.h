@@ -19,20 +19,24 @@ namespace Constants
                               "and your uploads will be put in {}.";
     constexpr auto FAQA6TPL = "You need a decent assortment of mods and have thorough knowledge of modding the game.";
 
+    constexpr auto BTD6EpicId = "6a8dfa6e441e4f2f9048a98776c6077d";
     constexpr uint32_t BTD6SteamId = 960090;
     constexpr uint64_t VerifyChanId = 715598300505702440;
     constexpr uint64_t VerifyInstructMsgId = 1009150994556399677;
-    constexpr uint64_t VerifiedRoleId = 511848372999553035;
+    constexpr uint64_t VerifiedEpicRoleId = 1134543406387961886;
+    constexpr uint64_t VerifiedSteamRoleId = 511848372999553035;
     constexpr uint64_t YTAnnounceChanId = 787834326917316628;
 
     constexpr auto VerifyDAPIFailTPL = "Failed to get profile info. Status code: {} Status line: {}";
-    constexpr auto VerifyNoBTD6TPL = "I could not find BTD6 in your Steam games list. Do you perhaps not have your games "
-                                     "public, or not have BTD6? Make sure you do, then try again. If you do not know how to "
-                                     "make your account/games public, look it up.";
+    constexpr auto VerifyNoBTD6EpicTPL = "I could not find BTD6 in your Epic Games Store games list. Make sure the account you're "
+                                         "using has the game, then try again.";
+    constexpr auto VerifyNoBTD6SteamTPL = "I could not find BTD6 in your Steam games list. Do you perhaps not have your games "
+                                          "public, or not have BTD6? Make sure you do, then try again. If you do not know how to "
+                                          "make your account/games public, look it up.";
     constexpr auto VerifyNoSteamTPL = "I could not find Steam in your connected accounts. Do you perhaps not have it "
                                       "connected? Make sure you do in Discord Settings -> Connections, then try again.";
     constexpr auto VerifySAPIFailTPL = "Steam API request failed. Status code: {} Status line: {}";
-    constexpr auto VerifyWrongChannelTPL = "please execute this command in {}.";
+    constexpr auto VerifyWrongChannelTPL = "Please execute this command in {}.";
 }
 
 #endif // CONSTANTS_H

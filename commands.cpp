@@ -9,18 +9,19 @@ namespace Commands
 {
     enum class VerifyState { NoSteamConnected, NoBtd6, Success };
 
-    void makeFaq(dpp::commandhandler& handler, const std::string& command, const dpp::parameter_list_t& params, const dpp::command_source& src)
+    void makeFaq(dpp::cluster& client, const dpp::slashcommand_t& event)
     {
-        if (params[0].second.index() == 0)
+        dpp::command_value parameter = event.get_parameter("channel");
+        if (parameter.index() == 0)
         {
-            handler.reply(BotUtil::replyTo(src.issuer, "need a channel."), src);
+            event.reply(dpp::message("Need a channel."));
             return;
         }
 
-        dpp::channel c = std::get<dpp::channel>(params[0].second);
+        dpp::channel c = client.channel_get_sync(std::get<dpp::snowflake>(parameter));
         if (!c.is_text_channel())
         {
-            handler.reply(BotUtil::replyTo(src.issuer, "channel must be a text channel."), src);
+            event.reply(dpp::message("Channel must be a text channel."));
             return;
         }
 
@@ -33,26 +34,52 @@ namespace Commands
            .add_field("How can I test upcoming mods?", Constants::FAQA4TPL)
            .add_field("How do I get the YouTubers role?", std::format(Constants::FAQA5TPL, dpp::channel::get_mention(Constants::YTAnnounceChanId)))
            .add_field("How do I get the Modders role?", Constants::FAQA6TPL);
-        handler.owner->message_create(dpp::message(c.id, embed));
+        client.message_create(dpp::message(c.id, embed));
     }
 
-    void verify(dpp::commandhandler& handler, const std::string& command, const dpp::parameter_list_t& params, const dpp::command_source& src)
+    void verifyEpicGames(dpp::cluster& client, const dpp::slashcommand_t& event)
     {
-        if (src.channel_id != Constants::VerifyChanId)
+        if (event.command.channel_id != Constants::VerifyChanId)
         {
             std::string failReply = std::format(Constants::VerifyWrongChannelTPL, dpp::channel::get_mention(Constants::VerifyChanId));
-            handler.reply(BotUtil::replyTo(src.issuer, failReply), src);
+            event.reply(dpp::message(failReply));
+            return;
+        }
+
+        dpp::interaction_modal_response modal("verify_modal", "Epic Games Verification");
+        modal.add_component(
+            dpp::component()
+                .set_label("Authorization code")
+                .set_id("auth_code")
+                .set_required(true)
+                .set_type(dpp::cot_text)
+                .set_placeholder("https://legendary.gl/epiclogin")
+                .set_min_length(32)
+                .set_max_length(32)
+                .set_text_style(dpp::text_short)
+        );
+        event.dialog(modal);
+    }
+
+    void verifySteam(dpp::cluster& client, const dpp::slashcommand_t& event)
+    {
+        const dpp::user& issuer = event.command.get_issuing_user();
+
+        if (event.command.channel_id != Constants::VerifyChanId)
+        {
+            std::string failReply = std::format(Constants::VerifyWrongChannelTPL, dpp::channel::get_mention(Constants::VerifyChanId));
+            event.reply(dpp::message(failReply));
             return;
         }
 
         cpr::Response response = cpr::Get(
-            cpr::Url(std::format("https://discordapp.com/api/v6/users/{}/profile", (uint64_t)src.issuer.id)),
-            cpr::Header{ { "Authorization", BotConfig::instance().userToken() } }
+            cpr::Url(std::format("https://discordapp.com/api/v6/users/{}/profile", (uint64_t)issuer.id)),
+            cpr::Header{{"Authorization", BotConfig::instance().userToken()}}
         );
 
         if (response.status_code >= 400)
         {
-            BotUtil::shitCodeException(handler, std::format(Constants::VerifyDAPIFailTPL, response.status_code, response.status_line), src);
+            BotUtil::shitCodeException(event, std::format(Constants::VerifyDAPIFailTPL, response.status_code, response.status_line));
             return;
         }
 
@@ -74,7 +101,7 @@ namespace Commands
             cpr::Response ownedResponse = cpr::Get(cpr::Url(ownedUrl));
             if (ownedResponse.status_code >= 400)
             {
-                BotUtil::shitCodeException(handler, std::format(Constants::VerifySAPIFailTPL, response.status_code, response.status_line), src);
+                BotUtil::shitCodeException(event, std::format(Constants::VerifySAPIFailTPL, response.status_code, response.status_line));
                 return;
             }
 
@@ -96,18 +123,16 @@ namespace Commands
         switch (verifyState)
         {
         case VerifyState::NoBtd6:
-            handler.reply(BotUtil::replyTo(src.issuer, Constants::VerifyNoBTD6TPL), src);
-            handler.owner->message_delete(src.message_event->msg.id, src.channel_id);
+            event.reply(dpp::message(Constants::VerifyNoBTD6SteamTPL));
             break;
         case VerifyState::NoSteamConnected:
-            handler.reply(BotUtil::replyTo(src.issuer, Constants::VerifyNoSteamTPL), src);
-            handler.owner->message_delete(src.message_event->msg.id, src.channel_id);
+            event.reply(dpp::message(Constants::VerifyNoSteamTPL));
             break;
         case VerifyState::Success:
-            handler.reply(BotUtil::replyTo(src.issuer, "you were verified successfully!"), src);
+            event.reply(dpp::message("You were verified successfully!"));
             std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-            handler.owner->guild_member_add_role(src.guild_id, src.issuer.id, Constants::VerifiedRoleId);
-            BotUtil::getAndDeleteBulk(handler.owner, src.channel_id, 0, 0, Constants::VerifyInstructMsgId);
+            client.guild_member_add_role(event.command.guild_id, issuer.id, Constants::VerifiedSteamRoleId);
+            BotUtil::getAndDeleteBulk(client, event.command.channel_id, 0, 0, Constants::VerifyInstructMsgId);
             break;
         }
     }

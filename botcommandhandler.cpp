@@ -1,12 +1,18 @@
 #include "botcommandhandler.h"
 
-namespace BotCommandHandler
+BotCommandHandler::BotCommandHandler(dpp::cluster& cluster) : cluster(cluster)
 {
-    void addCommand(dpp::commandhandler& handler, const std::string& command, commandFunc func, const dpp::parameter_registration_t& params,
-                    const std::string& description)
-    {
-        handler.add_command(command, params, [func, &handler](const std::string& command, const dpp::parameter_list_t& params, dpp::command_source src) {
-            func(handler, command, params, src);
-        });
-    }
+    cluster.on_slashcommand(std::bind(&BotCommandHandler::handOver, this, std::placeholders::_1));
+}
+
+void BotCommandHandler::addCommand(const dpp::slashcommand& cmd, commandFunc func)
+{
+    cluster.global_command_create(cmd);
+    commands.insert({cmd.name, func});
+}
+
+void BotCommandHandler::handOver(const dpp::slashcommand_t& event)
+{
+    if (auto command = commands.find(event.command.get_command_name()); command != commands.end())
+        command->second(cluster, event);
 }

@@ -1,11 +1,12 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
-#include <dpp/commandhandler.h>
+#include <dpp/cluster.h>
 
 namespace Commands
 {
-    void makeFaq(dpp::commandhandler& handler, const std::string& command, const dpp::parameter_list_t& params, const dpp::command_source& src);
-    void verify(dpp::commandhandler& handler, const std::string& command, const dpp::parameter_list_t& params, const dpp::command_source& src);
+    void makeFaq(dpp::cluster& client, const dpp::slashcommand_t& event);
+    void verifyEpicGames(dpp::cluster& client, const dpp::slashcommand_t& event);
+    void verifySteam(dpp::cluster& client, const dpp::slashcommand_t& event);
 }
 
 #endif // COMMANDS_H
