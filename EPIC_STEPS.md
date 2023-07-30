@@ -12,7 +12,7 @@
 Well, thing is you really can't 100%, but I've done the most I can to make it as safe as possible. Here's the facts:
 - No information is exposed to other users of the server.
 - The bot is completely open source. You can check the code for anything spooky.
-- The authorization code appears to expire quickly after the command is ran.
+- Your authorization code and access token are invalidated right after the command is ran.
 - The server's really big and I'd say I like it. I don't care about Epic Games stuff and it would be stupid to throw everything away for it.
 
 If there's anything I can do to make it less spooky on the code side of things, then create an issue with some details, but I don't think more can be done.

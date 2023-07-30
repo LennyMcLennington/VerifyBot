@@ -1,7 +1,7 @@
 #include <dpp/dpp.h>
 #include "botcommandhandler.h"
 #include "botconfig.h"
-#include "botutil.h"
+#include "verification.h"
 #include "commands.h"
 
 int main()
@@ -27,10 +27,8 @@ int main()
     });
 
     client.on_form_submit([&client](const dpp::form_submit_t& event) {
-        if (event.custom_id != "verify_modal")
-            return;
         std::string authCode = std::get<std::string>(event.components[0].components[0].value);
-        BotUtil::epicGamesVerify(client, event, authCode);
+        Verification::doEpicGames(client, event, authCode);
     });
 
     client.start(dpp::st_wait);
