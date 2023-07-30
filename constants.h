@@ -5,8 +5,7 @@
 namespace Constants
 {
     constexpr auto FAQA1TPL = "Follow the steps in {} and you'll get access to the #mod-download, #help-requests, and #mod-making "
-                              "channels (hopefully self-explanatory). Currently, **only the Steam version under Windows or Linux "
-                              "is supported.**";
+                              "channels (hopefully self-explanatory). Currently, **only Windows and Linux are supported.**";
     constexpr auto FAQA2TPL = "Mods are made in C# with [BTD Mod Helper](https://github.com/gurrenm3/BTD-Mod-Helper). "
                               "If you've finished a mod, post it in #mod-making and ping a staff member, and if it abides by the "
                               "[mod submission guidelines](https://pastebin.com/T8T8EJQ5), we'll put it up in #mod-download.";
