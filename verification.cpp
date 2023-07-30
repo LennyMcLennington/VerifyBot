@@ -8,6 +8,14 @@ namespace Verification
 {
     enum class VerifyState { NoSteamConnected, NoBtd6, Success };
 
+    void killEpicAccessToken(const std::string& accessToken, const std::string& auth)
+    {
+        cpr::Delete(
+            cpr::Url("https://account-public-service-prod.ol.epicgames.com/account/api/oauth/sessions/kill/" + accessToken),
+            cpr::Header{{"Authorization", auth}}
+        );
+    }
+
     void verifySuccessful(dpp::cluster& client, const dpp::interaction_create_t& event)
     {
         event.reply("You were verified successfully!");
@@ -86,6 +94,7 @@ namespace Verification
         if (entitlementsResponse.status_code >= 500)
         {
             event.reply("Failed to get entitlements, status code " + std::to_string(oauthResponse.status_code));
+            killEpicAccessToken(accessToken, auth);
             return;
         }
 
@@ -94,11 +103,13 @@ namespace Verification
         {
             std::string errorCode = entitlementsJson["errorCode"].template get<std::string>();
             event.reply("Failed to get entitlements, error code " + errorCode);
+            killEpicAccessToken(accessToken, auth);
             return;
         }
         else if (entitlementsResponse.status_code >= 400)
         {
             event.reply("Failed to get entitlements, status code " + std::to_string(oauthResponse.status_code));
+            killEpicAccessToken(accessToken, auth);
             return;
         }
 
@@ -106,17 +117,12 @@ namespace Verification
             return item["namespace"].template get<std::string>() == Constants::BTD6EpicId;
         });
 
-        if (!ownsBtd6)
-        {
+        if (ownsBtd6)
+            verifySuccessful(client, event);
+        else
             event.reply(Constants::VerifyNoBTD6EpicTPL);
-            return;
-        }
 
-        verifySuccessful(client, event);
-        cpr::Delete(
-            cpr::Url("https://account-public-service-prod.ol.epicgames.com/account/api/oauth/sessions/kill/" + accessToken),
-            cpr::Header{{"Authorization", auth}}
-        );
+        killEpicAccessToken(accessToken, auth);
     }
 
     void doSteam(dpp::cluster& client, const dpp::slashcommand_t& event)
